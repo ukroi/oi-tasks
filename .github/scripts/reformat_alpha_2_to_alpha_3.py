@@ -1,7 +1,7 @@
 import json
 import os
 
-contest = 'balkoi'
+contest = 'ioi'
 year = '2023'
 def reformat():
     global contest
@@ -10,7 +10,7 @@ def reformat():
         print(text)
         assert False
     folder_dir = os.path.join(os.path.dirname(__file__), '../..')
-    with open(os.path.join(folder_dir, 'scripts', '../data/al23.json'), 'r') as f:
+    with open(os.path.join(folder_dir, '.github/data/al23.json'), 'r') as f:
         countries = json.load(f)
         al2to3 = {}
         for country in countries:

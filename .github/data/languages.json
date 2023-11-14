@@ -103,7 +103,9 @@
         "VGB",
         "VIR",
         "ZMB",
-        "ZWE"
+        "ZWE",
+        "PSE",
+        "TUN"
     ],
     "sq": [
         "ALB",
@@ -361,7 +363,8 @@
         "RUS",
         "BLR",
         "KAZ",
-        "KGZ"
+        "KGZ",
+        "IOI"
     ],
     "rw": [
         "RWA"
