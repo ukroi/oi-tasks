@@ -13,6 +13,7 @@ PASSWORD = os.environ["EOLYMP_PASSWORD"]
 api = API(space_id=SPACE_ID, username=USERNAME, password=PASSWORD)
 folder_dir = os.path.join(os.path.dirname(__file__), '../..')
 
+
 def get_problem_sources():
     problems = api.get_problems()
     sources = {}
@@ -36,7 +37,9 @@ def get_languages():
     print(languages)
     return languages
 
+
 all_languages = get_languages()
+
 
 def get_statements_from_folder(walk_path):
     statements = {}
@@ -93,6 +96,7 @@ def get_hash_of_file(path):
 
 def update_eolymp_statements(prob_id, eolymp_statements, folder_statements):
     en = None
+    api.set_problem_id(problem_id=prob_id)
     for statement in eolymp_statements:
         locale = statement.locale
         print('Working on', locale)
@@ -135,6 +139,7 @@ def update_statement_with_problems(olymp, year, problems):
         folder_statements = get_statements(all_languages, walk_path)
         eolymp_statements = api.get_statements(prob_id)
         update_eolymp_statements(prob_id, eolymp_statements, folder_statements)
+
 
 def update_statement(olymp, year):
     source = olymp + ' ' + str(year)
