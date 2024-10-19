@@ -43,7 +43,7 @@ class API:
 
     def create_statement(self, prob_id, locale, title, link, source=""):
         self.set_problem_id(problem_id=prob_id)
-        s = statement_pb2.Statement(problem_id=prob_id, locale=locale, title=title,
+        s = statement_pb2.Statement(locale=locale, title=title,
                                     content=content_pb2.Content(latex=" "), download_link=link, source=source)
         return self.statement_client.CreateStatement(statement_service_pb2.CreateStatementInput(statement=s)).statement_id
 
