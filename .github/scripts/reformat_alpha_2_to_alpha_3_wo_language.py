@@ -1,10 +1,11 @@
 import json
 import os
 
-#ejoi-2019-1-UKR.pdf -> ejoi-2019-1-uk_UKR.pdf
-
 contest = 'ejoi'
 year = '2024'
+
+#ejoi-2024-1-ua.pdf -> ejoi-2024-1-UKR.pdf
+
 def reformat():
     global contest
     global year
@@ -12,13 +13,11 @@ def reformat():
         print(text)
         assert False
     folder_dir = os.path.join(os.path.dirname(__file__), '../..')
-    with open(os.path.join(folder_dir, '.github', 'scripts', '../data/languages.json'), 'r') as f:
-        languages = json.load(f)
-        country_to_language = {}
-        for lang in languages:
-            for country in languages[lang]:
-                country_to_language[country] = lang
-        print(country_to_language)
+    with open(os.path.join(folder_dir, '.github', 'scripts', '../data/al23.json'), 'r') as f:
+        countries = json.load(f)
+        al2to3 = {}
+        for country in countries:
+            al2to3[country['alpha2']] = country['alpha3']
         year_path = os.path.join(folder_dir, 'statements', contest, year)
         problems = 0
         max_problem = 0
@@ -47,11 +46,12 @@ def reformat():
                 print(name)
                 if name[-4:] != '.pdf':
                     make_error('wrong format of filename ' + statement)
-                if len(name) != 7:
+                if len(name) != 6:
                     continue
-                country = name[:3]
-                language = country_to_language[country]
-                new_name = language + "_" + country + ".pdf"
+                country = name[0:2].upper()
+                print(country)
+                print(al2to3[country])
+                new_name = al2to3[country] + ".pdf"
                 print(new_name)
                 parts[3] = new_name
                 new_file_name = "-".join(parts)
