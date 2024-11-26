@@ -57,7 +57,8 @@ class API:
         self.statement_client.DeleteStatement(statement_service_pb2.DeleteStatementInput(statement_id=statement_id))
 
     def upload_pdf(self, filename, data):
-        return self.asset.UploadFile(UploadFileInput(name=filename, type="application/pdf", data=data)).file_url
+        t = self.asset.UploadFile(UploadFileInput(name=filename, type="application/pdf", data=data))
+        return t.file_url
 
 
 def get_many(f, item_filter=None):
