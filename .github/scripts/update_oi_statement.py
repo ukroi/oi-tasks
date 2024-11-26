@@ -3,6 +3,7 @@ import os
 import hashlib
 
 import requests
+from eolymp.ecm.content_pb2 import Content
 
 from API import API
 
@@ -13,8 +14,12 @@ PASSWORD = os.environ["EOLYMP_PASSWORD"]
 api = API(space_id=SPACE_ID, username=USERNAME, password=PASSWORD)
 folder_dir = os.path.join(os.path.dirname(__file__), '../..')
 
+_sources = {}
 
 def get_problem_sources():
+    global _sources
+    if len(_sources) > 0:
+        return _sources
     problems = api.get_problems()
     sources = {}
     for problem in problems:
@@ -27,6 +32,7 @@ def get_problem_sources():
         sources[en.source] = sources.get(en.source, []) + [problem_id]
     print('Sources')
     print(sources)
+    _sources = sources
     return sources
 
 
@@ -106,15 +112,19 @@ def update_eolymp_statements(prob_id, eolymp_statements, folder_statements):
             path = folder_statements[locale]
             folder_hash = get_hash_of_file(path)
             eolymp_statement_name = ''
-            if not hasattr(statement, 'download_link') or statement.download_link == '':
+            if not hasattr(statement, 'download_link') or statement.download_link == '' or "static.eolymp.com" in statement.download_link:
                 eolymp_hash = ''
             else:
                 s = requests.get(statement.download_link)
                 eolymp_hash = hashlib.sha256(s.content).hexdigest()
             if folder_hash != eolymp_hash:
-                statement.download_link = get_link_from_file(path)
-                print('Updating')
-                api.update_statement(prob_id, statement)
+                try:
+                    statement.download_link = get_link_from_file(path)
+                    print('Updating')
+                    api.update_statement(prob_id, statement)
+                except:
+                    print("fail")
+                    pass
             folder_statements[locale] = None
         else:
             # TODO DELETE ENGL - delete
