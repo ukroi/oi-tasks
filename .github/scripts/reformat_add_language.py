@@ -3,11 +3,10 @@ import os
 
 #ejoi-2019-1-UKR.pdf -> ejoi-2019-1-uk_UKR.pdf
 
-contest = 'ejoi'
-year = '2024'
+
 def reformat():
-    global contest
-    global year
+    contest = 'ejoi'
+    year = '2024'
     def make_error(text):
         print(text)
         assert False

@@ -1,11 +1,9 @@
 import json
 import os
 
-contest = 'jboi'
-year = '2023'
 def reformat():
-    global contest
-    global year
+    contest = 'jboi'
+    year = '2023'
     def make_error(text):
         print(text)
         assert False

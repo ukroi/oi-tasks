@@ -1,14 +1,13 @@
 import json
 import os
 
-contest = 'ejoi'
-year = '2024'
+
 
 #ejoi-2024-1-ua.pdf -> ejoi-2024-1-UKR.pdf
 
 def reformat():
-    global contest
-    global year
+    contest = 'ejoi'
+    year = '2024'
     def make_error(text):
         print(text)
         assert False
