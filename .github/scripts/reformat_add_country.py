@@ -1,12 +1,12 @@
 import json
 import os
 
-#ejoi-2019-1-UKR.pdf -> ejoi-2019-1-uk_UKR.pdf
+#ejoi-2019-1-uk.pdf -> ejoi-2019-1-uk_UKR.pdf
 
 
 def reformat():
-    contest = 'ejoi'
-    year = '2024'
+    contest = 'baltoi'
+    year = '2025'
     def make_error(text):
         print(text)
         assert False
@@ -46,10 +46,10 @@ def reformat():
                 print(name)
                 if name[-4:] != '.pdf':
                     make_error('wrong format of filename ' + statement)
-                if len(name) != 7:
+                if len(name) != 6:
                     continue
-                country = name[:3]
-                language = country_to_language[country]
+                language = name[:2]
+                country = languages[language][0]
                 new_name = language + "_" + country + ".pdf"
                 print(new_name)
                 parts[3] = new_name
