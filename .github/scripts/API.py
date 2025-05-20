@@ -6,6 +6,7 @@ from eolymp.asset.asset_service_pb2 import UploadFileInput
 from eolymp.atlas import statement_service_pb2, statement_pb2
 from eolymp.atlas.problem_service_http import ProblemServiceClient
 from eolymp.atlas.problem_service_pb2 import ListProblemsInput
+from eolymp.atlas.statement_pb2 import Statement
 from eolymp.atlas.statement_service_http import StatementServiceClient
 from eolymp.core.http_client import HttpClient
 from eolymp.ecm import content_pb2
@@ -45,12 +46,14 @@ class API:
         self.set_problem_id(problem_id=prob_id)
         s = statement_pb2.Statement(locale=locale, title=title,
                                     content=content_pb2.Content(latex=" "), download_link=link, source=source)
-        return self.statement_client.CreateStatement(statement_service_pb2.CreateStatementInput(statement=s)).statement_id
+        return self.statement_client.CreateStatement(
+            statement_service_pb2.CreateStatementInput(statement=s)).statement_id
 
     def update_statement(self, problem_id, statement):
         self.set_problem_id(problem_id=problem_id)
         return self.statement_client.UpdateStatement(
-            statement_service_pb2.UpdateStatementInput(statement_id=statement.id, statement=statement))
+            statement_service_pb2.UpdateStatementInput(statement_id=statement.id, statement=statement,
+                                                       patch=[Statement.PATCH_DOWNLOAD_LINK]))
 
     def delete_statement(self, problem_id, statement_id):
         self.set_problem_id(problem_id=problem_id)
@@ -75,4 +78,3 @@ def get_many(f, item_filter=None):
         offset += size
         print(offset)
     return items
-
