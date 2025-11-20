@@ -11,7 +11,7 @@ from eolymp.atlas.statement_service_http import StatementServiceClient
 from eolymp.core.http_client import HttpClient
 from eolymp.ecm import content_pb2
 from eolymp.universe.space_service_pb2 import DescribeSpaceInput
-from eolymp.universe.universe_http import UniverseClient
+from eolymp.universe.space_service_http import SpaceServiceClient
 
 
 class API:
@@ -21,7 +21,7 @@ class API:
                                    'grant_type': 'password'})
         token = json.loads(resp.text)['access_token']
         client = HttpClient(token=token)
-        u = UniverseClient(client)
+        u = SpaceServiceClient(client)
         space = u.DescribeSpace(DescribeSpaceInput(space_id=space_id)).space
         self.client = client
         self.space = space
