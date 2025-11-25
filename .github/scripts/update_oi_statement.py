@@ -118,13 +118,10 @@ def update_eolymp_statements(prob_id, eolymp_statements, folder_statements):
                 s = requests.get(statement.download_link)
                 eolymp_hash = hashlib.sha256(s.content).hexdigest()
             if folder_hash != eolymp_hash:
-                try:
-                    statement.download_link = get_link_from_file(path)
-                    print('Updating')
-                    api.update_statement(prob_id, statement)
-                except:
-                    print("fail")
-                    pass
+                statement.download_link = get_link_from_file(path)
+                print('Updating')
+                api.update_statement(prob_id, statement)
+
             folder_statements[locale] = None
         else:
             # TODO DELETE ENGL - delete

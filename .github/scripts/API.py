@@ -53,7 +53,7 @@ class API:
         self.set_problem_id(problem_id=problem_id)
         return self.statement_client.UpdateStatement(
             statement_service_pb2.UpdateStatementInput(statement_id=statement.id, statement=statement,
-                                                       patch=[Statement.PATCH_DOWNLOAD_LINK]))
+                                                       patch=[Statement.Patch.DOWNLOAD_LINK]))
 
     def delete_statement(self, problem_id, statement_id):
         self.set_problem_id(problem_id=problem_id)
