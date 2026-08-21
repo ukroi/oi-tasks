@@ -1,6 +1,7 @@
 import json
 import os
 import hashlib
+import re
 
 import requests
 from eolymp.ecm.content_pb2 import Content
@@ -8,6 +9,14 @@ from eolymp.ecm.content_pb2 import Content
 from API import API
 
 SPACE_ID = os.environ["SPACE_ID"]
+
+# <lang>_<CCC>.pdf -- an ISO-639 language and an ISO-3166 alpha-3 country.  Most languages
+# carry a two-letter ISO-639-1 code, but some exist only in ISO-639-2/3 and are three
+# letters: Montenegrin is "cnr" and has no two-letter form at all.  So the name is parsed
+# rather than sliced at fixed offsets, which is what limited this to two-letter codes.
+# languages.json is still the whitelist deciding which pairs are allowed.
+STATEMENT_NAME = re.compile(r'([a-z]{2,3})_([A-Z]{3})\.pdf')
+
 USERNAME = os.environ["EOLYMP_USERNAME"]
 PASSWORD = os.environ["EOLYMP_PASSWORD"]
 
@@ -54,8 +63,10 @@ def get_statements_from_folder(walk_path):
             if filename == ".DS_Store":
                 continue
             name = filename.split('-')[-1]
-            language = name[0:2]
-            country = name[3:6]
+            match = STATEMENT_NAME.fullmatch(name)
+            if not match:
+                continue
+            language, country = match.group(1), match.group(2)
             statements[language] = statements.get(language, []) + [(country, filename)]
     print('Statements from folder')
     print(statements)

@@ -1,5 +1,13 @@
 import json
 import os
+import re
+
+# <lang>_<CCC>.pdf -- an ISO-639 language and an ISO-3166 alpha-3 country.  Most languages
+# carry a two-letter ISO-639-1 code, but some exist only in ISO-639-2/3 and are three
+# letters: Montenegrin is "cnr" and has no two-letter form at all.  So the name is parsed
+# rather than sliced at fixed offsets, which is what limited this to two-letter codes.
+# languages.json is still the whitelist deciding which pairs are allowed.
+STATEMENT_NAME = re.compile(r'([a-z]{2,3})_([A-Z]{3})\.pdf')
 
 
 def test_filenames():
@@ -45,14 +53,13 @@ def test_filenames():
                         if parts[2] != problem:
                             make_error('wrong problem in filename ' + statement)
                         name = parts[3]
-                        if len(name) != 10:
-                            make_error('wrong length of filename ' + statement)
-                        if name[2] != '_' or name[6:] != '.pdf':
+                        match = STATEMENT_NAME.fullmatch(name)
+                        if not match:
                             make_error('wrong format of filename ' + statement)
+                            continue
                         if name == 'en_ISC.pdf':
                             has_isc = True
-                        language = name[:2]
-                        country = name[3:6]
+                        language, country = match.group(1), match.group(2)
                         if language not in languages:
                             make_error('languages not found ' + statement)
                         if country not in languages[language]:
